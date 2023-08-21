@@ -1,2 +1,2 @@
 # Password-Locker
-Just a simple desktop app that will encrypt your passwords
+In progress. Will be made with python, along with PyQT for the UI
