@@ -3,7 +3,7 @@ import bcrypt
 from cryptography.fernet import Fernet
 
 while True:
-    #Log in screen
+    # Log in screen
     print('Welcome to Password Locker. Please choose an option below:')
     print('1: Log in')
     print('2: Create an account')
@@ -14,7 +14,7 @@ while True:
         print('Please type either 1, 2, or 3')
         usrInput = input()
 
-    #Login
+    # Login
     if usrInput == '1':
         if not os.path.exists('bin.txt'):
             print("Can't login since an account has not been created yet")
@@ -54,30 +54,27 @@ while True:
         else:
             print('Login successful')
 
-
-    #Account creation
+    # Account creation
     elif usrInput == '2':
         print("Please enter a master password. This will need to be complex as it will protect all of your passwords")
         password = input().encode('utf-8')
         salt = bcrypt.gensalt()
         hashedPW = bcrypt.hashpw(password, salt)
 
-        #Create bin.txt and store salt and hash
+        # Create bin.txt and store salt and hash
         with open('bin.txt', 'a') as f:
             f.write('salt = ' + salt.decode('utf-8') + '\n')
             f.write('hash = ' + hashedPW.decode('utf-8') + '\n')
         
         print("Master password successfully created")
 
-    #Exit
+    # Exit
     elif usrInput == '3':
         break
 
-
-
-    #Main password screen
-    #for password in passwordFile:
-        #print(password)
+    # Main password screen
+    # for password in passwordFile:
+        # print(password)
     print('1: Add password')
     print('2: Delete password')
     print('3: Logout')
@@ -87,14 +84,14 @@ while True:
         print('Please type either 1, 2, or 3')
         usrInput = input()
 
-    #Add a password
-    #if usrInput == '1':
-    #print('Enter password to store: ')
-    #usrInput = input()
+    # Add a password
+    # if usrInput == '1':
+    # print('Enter password to store: ')
+    # usrInput = input()
 
-    #Delete a password
-    #elif usrInput == '2':
+    # Delete a password
+    # elif usrInput == '2':
 
-    #Go back to login if 3
+    # Go back to log in if 3
 
 print()
