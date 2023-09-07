@@ -1,15 +1,17 @@
 import os
+import base64
 import bcrypt
 from cryptography.fernet import Fernet
 
 while True:
     # Log in screen
-    print('Welcome to Password Locker. Please choose an option below:')
+    print('\nWelcome to Password Locker. Please choose an option below:')
     print('1: Log in')
     print('2: Create an account')
     print('3: Exit')
 
     usrInput = input()
+    masterPass = ""
     while usrInput != '1' and usrInput != '2' and usrInput != '3':
         print('Please type either 1, 2, or 3')
         usrInput = input()
@@ -27,6 +29,7 @@ while True:
                 break
         
         usrInput = usrInput.encode('utf-8')
+        masterPass = usrInput
         salt = ''
         hashedPW = ''
 
@@ -52,7 +55,7 @@ while True:
             print('Password incorrect')
             continue
         else:
-            print('Login successful')
+            print('Login successful\n')
 
     # Account creation
     elif usrInput == '2':
@@ -73,25 +76,46 @@ while True:
         break
 
     # Main password screen
-    # for password in passwordFile:
-        # print(password)
-    print('1: Add password')
-    print('2: Delete password')
-    print('3: Logout')
+    # masterPass has to be a string with exactly 32 bytes
+    while len(masterPass) < 32:
+        masterPass += b'='
+    masterPass = masterPass[:32]   
+    # masterPass = b'This is a long string that is more than 32 bytes long.'
+    
+    cipher = Fernet(base64.urlsafe_b64encode(masterPass))
 
-    usrInput = input()
-    while usrInput != '1' and usrInput != '2' and usrInput != '3':
-        print('Please type either 1, 2, or 3')
+    while True:
+        # Print passwords
+        with open('bin.txt', 'r') as f:
+            for line in f:
+                if 'salt' in line or 'hash' in line:
+                    continue
+                print(cipher.decrypt(line.encode('utf-8')).decode('utf-8'))
+
+        print('1: Add password')
+        print('2: Delete password')
+        print('3: Logout')
         usrInput = input()
 
-    # Add a password
-    # if usrInput == '1':
-    # print('Enter password to store: ')
-    # usrInput = input()
+        while usrInput != '1' and usrInput != '2' and usrInput != '3':
+            print('Please type either 1, 2, or 3')
+            usrInput = input()
 
-    # Delete a password
-    # elif usrInput == '2':
+        # Add a password
+        if usrInput == '1':
+            print('Enter password to store: ')
+            usrInput = input()
+            
+            encrypted = cipher.encrypt(usrInput.encode('utf-8'))
+            with open('bin.txt', 'a') as f:
+                f.write(encrypted.decode('utf-8') + '\n')
 
-    # Go back to log in if 3
+        # Delete a password
+        # elif usrInput == '2':
+
+
+        # Go back to log in if 3
+        elif usrInput == '3':
+            break
 
 print()
