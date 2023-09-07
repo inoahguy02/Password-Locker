@@ -19,7 +19,7 @@ while True:
     # Login
     if usrInput == '1':
         if not os.path.exists('bin.txt'):
-            print("Can't login since an account has not been created yet")
+            print("\nCan't login since an account has not been created yet\n")
             continue
         
         while True:
@@ -47,19 +47,19 @@ while True:
                     break
             
             if not foundSalt or not foundHash:
-                print('Error finding salt or hash. Returning to login screen')
+                print('\nError finding salt or hash. Returning to login screen\n')
                 continue
 
         tempHash = bcrypt.hashpw(usrInput, salt)
         if tempHash != hashedPW:
-            print('Password incorrect')
+            print('Password incorrect\n')
             continue
         else:
             print('Login successful\n')
 
     # Account creation
     elif usrInput == '2':
-        print("Please enter a master password. This will need to be complex as it will protect all of your passwords")
+        print("\nPlease enter a master password. This will need to be complex as it will protect all of your passwords")
         password = input().encode('utf-8')
         salt = bcrypt.gensalt()
         hashedPW = bcrypt.hashpw(password, salt)
@@ -70,7 +70,7 @@ while True:
             f.write('hash = ' + hashedPW.decode('utf-8') + '\n')
         
         masterPass = password
-        print("Master password successfully created")
+        print("Master password successfully created\n")
 
     # Exit
     elif usrInput == '3':
