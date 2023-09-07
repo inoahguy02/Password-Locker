@@ -23,7 +23,7 @@ while True:
             continue
         
         while True:
-            print('Please enter the account password: ')
+            print('\nPlease enter the account password: ')
             usrInput = input()
             if usrInput != '':
                 break
@@ -69,6 +69,7 @@ while True:
             f.write('salt = ' + salt.decode('utf-8') + '\n')
             f.write('hash = ' + hashedPW.decode('utf-8') + '\n')
         
+        masterPass = password
         print("Master password successfully created")
 
     # Exit
@@ -80,17 +81,19 @@ while True:
     while len(masterPass) < 32:
         masterPass += b'='
     masterPass = masterPass[:32]   
-    # masterPass = b'This is a long string that is more than 32 bytes long.'
     
     cipher = Fernet(base64.urlsafe_b64encode(masterPass))
 
     while True:
         # Print passwords
+        passwords = []
         with open('bin.txt', 'r') as f:
             for line in f:
                 if 'salt' in line or 'hash' in line:
                     continue
-                print(cipher.decrypt(line.encode('utf-8')).decode('utf-8'))
+                p = cipher.decrypt(line.encode('utf-8')).decode('utf-8')
+                passwords.append(p)
+                print(p)
 
         print('1: Add password')
         print('2: Delete password')
@@ -103,16 +106,46 @@ while True:
 
         # Add a password
         if usrInput == '1':
-            print('Enter password to store: ')
+            print('\nEnter password to store: ')
             usrInput = input()
             
             encrypted = cipher.encrypt(usrInput.encode('utf-8'))
             with open('bin.txt', 'a') as f:
                 f.write(encrypted.decode('utf-8') + '\n')
 
-        # Delete a password
-        # elif usrInput == '2':
+            print("Password stored\n")
 
+        # Delete a password
+        elif usrInput == '2':
+            print("\nSelect which password to delete:")
+            
+            # print list of passwords
+            counter = 1
+            for p in passwords:
+                print('{}: {}'.format(counter, p))
+                counter += 1
+            print('{}: Cancel'.format(counter))
+            usrInput = input()
+
+            while int(usrInput) < 1 and int(usrInput) > counter:
+                print('Please choose one of the options displayed')
+                usrInput = input()
+
+            if int(usrInput) == counter:
+                print()
+                continue
+
+            # remove encrypted password from file
+            lineNum = int(usrInput) + 1
+            with open('bin.txt' , "r") as f:
+                fileLines = f.readlines()
+            
+            del fileLines[lineNum]
+
+            with open('bin.txt' , "w") as f:
+                f.writelines(fileLines)
+            
+            print('\nPassword successfully removed\n')
 
         # Go back to log in if 3
         elif usrInput == '3':
