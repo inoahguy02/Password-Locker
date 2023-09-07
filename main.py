@@ -6,22 +6,37 @@ from cryptography.fernet import Fernet
 while True:
     # Log in screen
     print('\nWelcome to Password Locker. Please choose an option below:')
-    print('1: Log in')
-    print('2: Create an account')
-    print('3: Exit')
+    if os.path.exists('bin.txt'):
+        print('1: Log in')
+    else:
+        print('1: Create an account')
+    print('2: Exit')
 
     usrInput = input()
     masterPass = ""
-    while usrInput != '1' and usrInput != '2' and usrInput != '3':
-        print('Please type either 1, 2, or 3')
+    while usrInput != '1' and usrInput != '2':
+        print('Please type either 1 or 2')
         usrInput = input()
 
     # Login
     if usrInput == '1':
+        # Create password
         if not os.path.exists('bin.txt'):
-            print("\nCan't login since an account has not been created yet\n")
+            print("\nPlease enter a master password. This will need to be complex as it will protect all of your passwords")
+            password = input().encode('utf-8')
+            salt = bcrypt.gensalt()
+            hashedPW = bcrypt.hashpw(password, salt)
+
+            # Create bin.txt and store salt and hash
+            with open('bin.txt', 'a') as f:
+                f.write('salt = ' + salt.decode('utf-8') + '\n')
+                f.write('hash = ' + hashedPW.decode('utf-8') + '\n')
+            
+            masterPass = password
+            print("Master password successfully created\n")
             continue
         
+        # Login
         while True:
             print('\nPlease enter the account password: ')
             usrInput = input()
@@ -57,23 +72,8 @@ while True:
         else:
             print('Login successful\n')
 
-    # Account creation
-    elif usrInput == '2':
-        print("\nPlease enter a master password. This will need to be complex as it will protect all of your passwords")
-        password = input().encode('utf-8')
-        salt = bcrypt.gensalt()
-        hashedPW = bcrypt.hashpw(password, salt)
-
-        # Create bin.txt and store salt and hash
-        with open('bin.txt', 'a') as f:
-            f.write('salt = ' + salt.decode('utf-8') + '\n')
-            f.write('hash = ' + hashedPW.decode('utf-8') + '\n')
-        
-        masterPass = password
-        print("Master password successfully created\n")
-
     # Exit
-    elif usrInput == '3':
+    elif usrInput == '2':
         break
 
     # Main password screen
