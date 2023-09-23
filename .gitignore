@@ -3,3 +3,7 @@ bin.txt
 build
 dist
 main.spec
+
+# Added by cargo
+
+/target
