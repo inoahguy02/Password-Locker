@@ -1,2 +1,2 @@
 # Password-Locker
-In progress. Will be made with python, along with PyQT for the UI
+Local password manager made in rust. All passwords are encrypted to maximize security
