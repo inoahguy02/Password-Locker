@@ -8,7 +8,8 @@ fn main() {
         println!("Welcome to Password-Locker\n\
                 Please choose an option below:\n\
                 1. Create account\n\
-                2. Log in");
+                2. Log in\n\
+                3. Exit");
 
         let input = get_input();
 
@@ -20,9 +21,38 @@ fn main() {
             println!("Please enter the master password:");
             let input = get_input();
             login(input);
+        } else if input == "3" {
+            break;
         } else {
-            println!("Please type in either 1 or 2");
+            println!("Please type in either 1, 2, or 3");
             continue;
+        }
+
+        println!("Login successful!");
+
+        loop {
+            print_passwords();
+            println!("Please choose an option below:\n\
+                    1. Add password\n\
+                    2. Delete password\n\
+                    3. Logout");
+            
+            let input = get_input();
+
+            if input == "1" {
+                println!("Please type the password to add:");
+                let input = get_input();
+                creds::encrypt(input);
+            } else if  input == "2" {
+                println!("Please enter the number of the password to delete:");
+                let input = get_input();
+                creds::remove(input);
+            } else if input == "3" {
+                break;
+            } else {
+                println!("Please type in either 1, 2, or 3");
+                continue;
+            }
         }
     }
 }
@@ -41,6 +71,12 @@ fn login(pass: String) {
 
 fn get_input() -> String {
     let mut buf = String::new();
-    stdin().read_line(&mut buf).unwrap();
+    stdin().read_line(&mut buf).unwrap(); // TODO: handle unwrap
     buf.trim().to_string()
+}
+
+fn print_passwords() {
+    // let passwords: Vec<String>
+    // for line in file => decrypt(line).push(passwords)
+    // for pwd in passwords => println!("{}: {}", counter, pwd);
 }

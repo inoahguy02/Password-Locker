@@ -29,6 +29,10 @@ pub fn store(data: Vec<u8>) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+pub fn remove(num: String) {
+
+}
+
 pub enum Type {
     Hash,
     Encryption,
