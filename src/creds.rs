@@ -5,7 +5,10 @@ use argon2::Argon2;
 
 
 pub fn encrypt(data: String) {
-    //store(data);
+    // gen nonce
+    // encrypt with master pass and nonce
+    
+    //store(data, Type::Encryption);
 }
 
 pub fn decrypt(data: String) {
@@ -24,7 +27,11 @@ pub fn hash(pass: String) -> Vec<u8> {
     return output_key_material;
 }
 
-pub fn store(data: Vec<u8>) -> Result<(), Box<dyn Error>> {
+pub fn store(data: Vec<u8>, etype: Type) -> Result<(), Box<dyn Error>> {
+    match etype {
+        Type::Hash => {},
+        Type::Encryption => {} // ciphertexthere//noncehere
+    }
 
     Ok(())
 }
@@ -35,10 +42,9 @@ pub fn remove(num: String) {
 
 pub enum Type {
     Hash,
-    Encryption,
-    Nonce,
+    Encryption
 }
 
-pub fn get(etype: Type) {
-    // Match
+pub fn get_hash() {
+    
 }

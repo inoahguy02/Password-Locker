@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 rand = { version = "0.8.5", features = ["getrandom"] }
 argon2 = "0.5.2"
-sodiumoxide = "0.2.7"
+aes-gcm = "0.10.3"

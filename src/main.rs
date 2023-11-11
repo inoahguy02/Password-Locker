@@ -21,7 +21,14 @@ fn main() {
         } else if  input == "2" {
             println!("Please enter the master password:");
             let input = get_input();
-            login(input);
+
+            match login(input) {
+                Ok(()) => {},
+                Err(e) => {
+                    println!("Login failed: {}", e);
+                    continue;
+                }
+            }
         } else if input == "3" {
             break;
         } else {
@@ -59,16 +66,20 @@ fn main() {
 
 fn create_account(pass: String) -> Result<(), Box<dyn Error>> {
     let hashedpw = creds::hash(pass);
-    creds::store(hashedpw)?;
+    creds::store(hashedpw, Type::Hash)?;
 
     Ok(())
 }
 
-fn login(pass: String) {
+fn login(pass: String) -> Result<(), Box<dyn Error>> {
     let attempted_hash = creds::hash(pass);
-    let stored_hash = creds::get(Type::Hash);
+    let stored_hash = creds::get_hash();
 
-    // if attempted_hash == stored_hash, Ok(()). Else, print password wrong. 2 attempts remaining. go back to beginning of loop
+    /*if attempted_hash != stored_hash {
+        return Err("Password is incorrect".into());
+    }*/
+
+    Ok(())
 }
 
 fn get_input() -> String {
