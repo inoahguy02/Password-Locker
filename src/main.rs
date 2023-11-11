@@ -1,5 +1,6 @@
 mod creds;
 
+use std::error::Error;
 use std::io::stdin;
 use creds::Type;
 
@@ -51,15 +52,16 @@ fn main() {
                 break;
             } else {
                 println!("Please type in either 1, 2, or 3");
-                continue;
             }
         }
     }
 }
 
-fn create_account(pass: String) {
+fn create_account(pass: String) -> Result<(), Box<dyn Error>> {
     let hashedpw = creds::hash(pass);
-    creds::store(hashedpw);
+    creds::store(hashedpw)?;
+
+    Ok(())
 }
 
 fn login(pass: String) {
@@ -76,7 +78,11 @@ fn get_input() -> String {
 }
 
 fn print_passwords() {
-    // let passwords: Vec<String>
-    // for line in file => decrypt(line).push(passwords)
-    // for pwd in passwords => println!("{}: {}", counter, pwd);
+    // let file = (Open file)
+
+    /*let counter = 0;
+    for line in file {
+        println!("{}: {}", counter, creds::decrypt(line));
+        counter += 1;
+    }*/
 }

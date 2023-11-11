@@ -5,7 +5,7 @@ use argon2::Argon2;
 
 
 pub fn encrypt(data: String) {
-
+    //store(data);
 }
 
 pub fn decrypt(data: String) {
