@@ -5,9 +5,9 @@ use std::io::stdin;
 use creds::Type;
 
 fn main() {
+    println!("Welcom to Password-Locker");
     loop {
-        println!("Welcome to Password-Locker\n\
-                Please choose an option below:\n\
+        println!("Please choose an option below:\n\
                 1. Create account\n\
                 2. Log in\n\
                 3. Exit");
@@ -15,9 +15,21 @@ fn main() {
         let input = get_input();
 
         if input == "1" {
+            println!("Creating an account will delete a previously made account. Continue?(y/n)");
+            let input = get_input();
+            if input != "Y" && input != "y" {
+                continue;
+            }
+
             println!("Please enter a master password:");
             let input = get_input();
-            create_account(input);
+            match create_account(input) {
+                Ok(()) => println!("Acccount created successfully"),
+                Err(e) => {
+                    println!("Account creation failed: {}", e.to_string());
+                    continue;
+                }
+            }
         } else if  input == "2" {
             println!("Please enter the master password:");
             let input = get_input();
@@ -65,7 +77,7 @@ fn main() {
 }
 
 fn create_account(pass: String) -> Result<(), Box<dyn Error>> {
-    let hashedpw = creds::hash(pass);
+    let hashedpw = creds::hash(pass)?;
     creds::store(hashedpw, Type::Hash)?;
 
     Ok(())
